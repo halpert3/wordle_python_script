@@ -254,13 +254,13 @@ def efficiency(input, limit=None, elim_weight=.05):
 ###############################################
 # --------------------------------------------#
 
-letters_not_in_answer = 'techa'
-green = 's1, n4'
-yellow = 'o43, s5'
+letters_not_in_answer = 'sadolner'
+green = 'i3, y5'
+yellow = ''
 
 
-limit = 35
-elim_weight = .9
+limit = 50
+elim_weight = .7
 
 # --------------------------------------------#
 ###############################################
