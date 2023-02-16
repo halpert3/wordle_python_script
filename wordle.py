@@ -254,12 +254,12 @@ def efficiency(input, limit=None, elim_weight=.05):
 ###############################################
 # --------------------------------------------#
 
-letters_not_in_answer = 'sadolner'
-green = 'i3, y5'
+letters_not_in_answer = ''
+green = 's1, a2, l3'
 yellow = ''
 
 
-limit = 50
+limit = 30
 elim_weight = .7
 
 # --------------------------------------------#
