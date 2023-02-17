@@ -5,9 +5,7 @@ r = requests.get(
     'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words')
 
 words_string = str(r.content, 'utf-8')
-
-
-# words_string = 'abcde\nabcdz\nedcda\nabcxy\nabwuv\naqrst\najjjj'
+complete_words_string = words_string
 
 
 def green_letters(input, letter_positions):
@@ -123,10 +121,6 @@ def create_slot_dict(input, slot):
 
 
 def score_word(word, slot_dicts, total_points):
-
-    # scores = dict()
-    # for i in range(5):
-    #     scores[word[i]] = slot_dicts[i].get(word[i])/total_points
 
     scores = list()
     for i in range(5):
@@ -251,6 +245,58 @@ def efficiency(input, limit=None, elim_weight=.05):
     return final
 
 
+def sacrifice_word(input, letters, unique_letter_positions):
+    if unique_letter_positions == '':
+        unique_list = list()
+    else:
+        unique_input = unique_letter_positions.split(', ')
+        unique_list = [list(filter(None, re.split('(\d+)', u)))
+                       for u in unique_input]
+    for item in unique_list:
+        item[1] = int(item[1]) - 1
+
+    res = '\n'.join(re.findall(f'\w*[{letters}]\w*', input))
+    res = res.split('\n')
+
+    scores = list()
+
+    for word in res:
+        score = 0
+        for i in range(len(letters)):
+            if letters[i] in word:
+                score += 1
+        scores.append([word, score])
+
+    for word_score in scores:
+        for item in unique_list:
+            i = item[1]
+            if word_score[0][i] == item[0]:
+                word_score[1] += 1
+
+    scores.sort(key=lambda x: x[1], reverse=True)
+    scores = scores[:20]
+
+    final = str()
+    buff = scores[0][1]
+    cnt = 0
+    for i, item in enumerate(scores):
+        if item[1] > 1:
+            pt = 'points'
+        else:
+            pt = 'point'
+        if i == 0:
+            final += f'{i+1}. {item[0]} - {item[1]} {pt}\n'
+        elif item[1] == buff:
+            cnt += 1
+            final += f'{i+1-cnt}. {item[0]} - {item[1]} {pt}\n'
+        else:
+            final += f'{i+1}. {item[0]} - {item[1]} {pt}\n'
+            buff = item[1]
+            cnt = 0
+
+    return final
+
+
 ###############################################
 # --------------------------------------------#
 
@@ -262,12 +308,22 @@ yellow = ''
 limit = 30
 elim_weight = .7
 
+
+sacrifice_mode = True
+sacrifice_word_letters = 'vetyon'
+sacrifice_unique_letter_positions = 's4, a4, a5'
+
+
 # --------------------------------------------#
 ###############################################
 
-
-words_string = not_contain(words_string, letters_not_in_answer)
-words_string = green_letters(words_string, green)
-words_string = yellow_letters(words_string, yellow)
-eff = efficiency(words_string, limit=limit, elim_weight=elim_weight)
-print(eff)
+if sacrifice_mode == False:
+    words_string = not_contain(words_string, letters_not_in_answer)
+    words_string = green_letters(words_string, green)
+    words_string = yellow_letters(words_string, yellow)
+    eff = efficiency(words_string, limit=limit, elim_weight=elim_weight)
+    print(eff)
+if sacrifice_mode == True:
+    sac_wor = sacrifice_word(complete_words_string, sacrifice_word_letters,
+                             sacrifice_unique_letter_positions)
+    print(sac_wor)
