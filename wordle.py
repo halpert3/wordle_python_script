@@ -1,5 +1,6 @@
 import requests
 import re
+from variables import *
 
 r = requests.get(
     'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words')
@@ -296,26 +297,6 @@ def sacrifice_word(input, letters, unique_letter_positions):
 
     return final
 
-
-###############################################
-# --------------------------------------------#
-
-letters_not_in_answer = ''
-green = 's1, a2, l3'
-yellow = ''
-
-
-limit = 30
-elim_weight = .7
-
-
-sacrifice_mode = True
-sacrifice_word_letters = 'vetyon'
-sacrifice_unique_letter_positions = 's4, a4, a5'
-
-
-# --------------------------------------------#
-###############################################
 
 if sacrifice_mode == False:
     words_string = not_contain(words_string, letters_not_in_answer)
