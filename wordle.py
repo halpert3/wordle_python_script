@@ -2,10 +2,9 @@ import requests
 import re
 from variables import *
 
-r = requests.get(
-    'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words')
+with open("words_string.txt", "r") as words_string:
+    words_string = words_string.read()
 
-words_string = str(r.content, 'utf-8')
 complete_words_string = words_string
 
 
