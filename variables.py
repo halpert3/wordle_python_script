@@ -1,12 +1,12 @@
-letters_not_in_answer = 'antorahconchdutoday'
-green = 's5, e3'
-yellow = 'l14, e4'
+letters_not_in_answer = ''
+green = ''
+yellow = ''
 
 
-limit = 50
-elim_weight = .7
+limit = 30
+elim_weight = .9
 
 
 sacrifice_mode = False
-sacrifice_word_letters = 'fykchblg'
-sacrifice_unique_letter_positions = 'e4'
+sacrifice_word_letters = ''
+sacrifice_unique_letter_positions = ''

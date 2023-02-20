@@ -10,14 +10,30 @@ with open("words_string.txt", "r") as ws:
 complete_words_string = words_string
 
 
+def not_contain(input, letters):
+    # skip function if no letters given
+    if letters == '':
+        return input
+
+    # remove duplicates and make lowercase
+    letters = "".join(set(letters)).lower()
+
+    # create regex and find words that don't contain these letters
+    regex = f'\\b[^{letters}]*\\b'
+    res = '\n'.join(re.findall(f'{regex}', input))
+    res = re.sub('\n+', '\n', res)
+    return res
+
 def green_letters(input, letter_positions):
 
+    # skip function if no green letters
     if letter_positions == '':
         return input
 
+    #re-assign variable
     res = input
 
-    # turn input into list
+    # turn letter_positions into list
     green_input = letter_positions.split(', ')
 
     # in case input doesn't split out letters and multiple numbers
@@ -29,7 +45,9 @@ def green_letters(input, letter_positions):
     # turn position strings into numbers
     green_input = [[x[0].lower(), int(x[1])-1] for x in list(green_input)]
 
+
     for g in green_input:
+        # create regex string for each letter
         new_str = str()
         letter = g[0]
         position = g[1]
@@ -38,20 +56,9 @@ def green_letters(input, letter_positions):
                 new_str += letter
             else:
                 new_str += '.'
-
+        # find words with letters in needed position
         res = '\n'.join(re.findall(f'{new_str}', res))
 
-    return res
-
-
-def not_contain(input, letters):
-    if letters == '':
-        return input
-    letters = "".join(set(letters)).lower()
-
-    regex = f'\\b[^{letters}]*\\b'
-    res = '\n'.join(re.findall(f'{regex}', input))
-    res = re.sub('\n+', '\n', res)
     return res
 
 
@@ -314,6 +321,7 @@ if sacrifice_mode == False:
     words_string = yellow_letters(words_string, yellow)
     eff = efficiency(words_string, limit=limit, elim_weight=elim_weight)
     print(eff)
+
 if sacrifice_mode == True:
     sac_wor = sacrifice_word(complete_words_string, sacrifice_word_letters,
                              sacrifice_unique_letter_positions)
