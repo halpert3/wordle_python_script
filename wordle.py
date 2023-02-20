@@ -2,9 +2,11 @@ import requests
 import re
 from variables import *
 
-with open("words_string.txt", "r") as words_string:
-    words_string = words_string.read()
+# getting list of all words
+with open("words_string.txt", "r") as ws:
+    words_string = ws.read()
 
+# replicating for sacrifice word function
 complete_words_string = words_string
 
 
@@ -14,9 +16,18 @@ def green_letters(input, letter_positions):
         return input
 
     res = input
+
+    # turn input into list
     green_input = letter_positions.split(', ')
 
-    green_input = [[x[0], int(x[1])-1] for x in list(green_input)]
+    # in case input doesn't split out letters and multiple numbers
+    for i in range(len(green_input)):
+        while len(green_input[i]) > 2:
+            green_input.append(f'{green_input[i][0]}{green_input[i][-1]}')
+            green_input[i] = green_input[i][0:-1]
+
+    # turn position strings into numbers
+    green_input = [[x[0].lower(), int(x[1])-1] for x in list(green_input)]
 
     for g in green_input:
         new_str = str()
@@ -36,7 +47,7 @@ def green_letters(input, letter_positions):
 def not_contain(input, letters):
     if letters == '':
         return input
-    letters = "".join(set(letters))
+    letters = "".join(set(letters)).lower()
 
     regex = f'\\b[^{letters}]*\\b'
     res = '\n'.join(re.findall(f'{regex}', input))
@@ -101,8 +112,8 @@ def yellow_letters(input, letter_positions):
 
     res = input
     for y in yellow_list:
-        res = eliminate_used_yellow(res, y[0], y[1])
-        res = find_potential_words_yellow(res, y[0], y[1])
+        res = eliminate_used_yellow(res, y[0].lower(), y[1])
+        res = find_potential_words_yellow(res, y[0].lower(), y[1])
 
     return res
 

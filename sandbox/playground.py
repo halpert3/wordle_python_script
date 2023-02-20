@@ -1,4 +1,8 @@
-with open("words_string.txt", "r") as words_string:
-    words_string = words_string.read()
+import re
 
-print(words_string[0:20])
+
+letters = 'RTRAER'
+
+letters = "".join(set(letters)).lower()
+
+print(letters)
