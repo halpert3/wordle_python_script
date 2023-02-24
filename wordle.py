@@ -24,13 +24,14 @@ def not_contain(input, letters):
     res = re.sub('\n+', '\n', res)
     return res
 
+
 def green_letters(input, letter_positions):
 
     # skip function if no green letters
     if letter_positions == '':
         return input
 
-    #re-assign variable
+    # re-assign variable
     res = input
 
     # turn letter_positions into list
@@ -44,7 +45,6 @@ def green_letters(input, letter_positions):
 
     # turn position strings into numbers
     green_input = [[x[0].lower(), int(x[1])-1] for x in list(green_input)]
-
 
     for g in green_input:
         # create regex string for each letter
@@ -63,10 +63,13 @@ def green_letters(input, letter_positions):
 
 
 def eliminate_used_yellow(input, letter, positions):
-
+    # re-assign variable
     res = input
+
+    # turn number strings into indices
     positions = [int(x)-1 for x in list(positions)]
 
+    # create regex to eliminate words that have the letter in the yellow position
     all_regex = list()
     for j in positions:
         new_str = str()
@@ -78,8 +81,10 @@ def eliminate_used_yellow(input, letter, positions):
 
         all_regex.append(new_str)
 
+    # crate a list of regex's to run
     all_regex = [f'\\b{x}\\b' for x in all_regex]
 
+    # run the regexes and rejoin the created list as a string
     for regex in all_regex:
         res = '\n'.join(re.findall(f'{regex}', res))
     return res
@@ -87,9 +92,13 @@ def eliminate_used_yellow(input, letter, positions):
 
 def find_potential_words_yellow(input, letter, positions):
     all_regex = list()
+
+    # turn number strings into indices
     positions = [int(x)-1 for x in list(positions)]
+    # potential positions for yellow letters
     positions = [x for x in range(5) if x not in positions]
 
+    # create regex for each letter
     for j in positions:
         new_str = str()
         for i in range(5):
@@ -101,23 +110,31 @@ def find_potential_words_yellow(input, letter, positions):
         all_regex.append(new_str)
 
     regex = "\\b"
+
+    # use the "|" to create a series of "or" regexes
     for x in all_regex:
         regex += x + '\\b|\\b'
     regex = regex[:-3]
 
+    # run the regexes and rejoin the created list as a string
     res = '\n'.join(re.findall(f'{regex}', input))
     return res
 
 
 def yellow_letters(input, letter_positions):
+    # skip function if no yellow letters
     if letter_positions == '':
         return input
 
+    # split letter_positions into list for looping
     yellow_input = letter_positions.split(', ')
+    # split the letters from positions
     yellow_list = [list(filter(None, re.split('(\d+)', y)))
                    for y in yellow_input]
-
+    # re-assign input
     res = input
+
+    # run through two yellow functions for each letter and position
     for y in yellow_list:
         res = eliminate_used_yellow(res, y[0].lower(), y[1])
         res = find_potential_words_yellow(res, y[0].lower(), y[1])
@@ -126,9 +143,11 @@ def yellow_letters(input, letter_positions):
 
 
 def create_slot_dict(input, slot):
+    # adjust index and create empty dictionary
     slot = slot - 1
     slot_dict = dict()
 
+    # create a dictionary counting each time a letter appears in that position
     for word in input:
         if word[slot] not in slot_dict:
             slot_dict[word[slot]] = 1
@@ -140,6 +159,7 @@ def create_slot_dict(input, slot):
 
 def score_word(word, slot_dicts, total_points):
 
+    # for a word, this function averages the scores for each letter appearing
     scores = list()
     for i in range(5):
         scores.append(slot_dicts[i].get(word[i])/total_points)
@@ -163,10 +183,13 @@ def efficiency_slot(input):
     slot_dicts = [firs, seco, thir, four, fift]
     # get total_points for divisor
     total_points = sum(firs.values())
+
+    # create a dictionay with a score for each word
     slot_scores = dict()
     for word in word_list:
         slot_scores.update(score_word(word, slot_dicts, total_points))
 
+    # normalize the scores so they work with percentages
     normalization_base = sum(slot_scores.values())
 
     for k in slot_scores:
@@ -206,11 +229,14 @@ def efficiency_elimination(input):
                 continue
             tracking += word[x]
 
+    # create total_scores for a divisor
     total_scores = sum(elim_scores.values())
 
+    # divide each word's score by the total
     for k in elim_scores:
         elim_scores[k] = elim_scores.get(k)/total_scores
 
+    # normalize the scores so they work with percentages
     normalization_base = sum(elim_scores.values())
 
     for k in elim_scores:
@@ -221,28 +247,32 @@ def efficiency_elimination(input):
 
 def efficiency(input, limit=None, elim_weight=.05):
 
-    slot_weight = 1 - elim_weight
-
+    # run the two efficiency methods
     elim = efficiency_elimination(input)
     slot = efficiency_slot(input)
 
+    # provide desired weight to the two efficiency methods
+    slot_weight = 1 - elim_weight
+
+    # create a dictionary for the final scores
     scores_dict = dict()
     for k in elim:
         scores_dict[k] = elim[k]*elim_weight + slot[k]*slot_weight
 
+    # convert dictonary of scores into list
     scores = list()
     for key, val in scores_dict.items():
         scores.append([key, val])
 
+    # round the score to 4 decimals
     for item in scores:
         item[1] = round(item[1]*100, 4)
 
+    # sort scores by highest first
     scores.sort(key=lambda x: x[1], reverse=True)
 
     # determine how many scores to display
     scores = scores[:limit]
-
-    # determine how many scores to display
 
     # create a list of scores to return
     # buff and cnt help give the same ranking to ties
@@ -264,20 +294,28 @@ def efficiency(input, limit=None, elim_weight=.05):
 
 
 def sacrifice_word(input, letters, unique_letter_positions):
+
+    # create an empty list if no unique_letter_postions
     if unique_letter_positions == '':
         unique_list = list()
     else:
+        # create a list for unique_letter_positions
         unique_input = unique_letter_positions.split(', ')
+        # create a list for anywhere letters
         unique_list = [list(filter(None, re.split('(\d+)', u)))
                        for u in unique_input]
+
+    # convert string to integer as index
     for item in unique_list:
         item[1] = int(item[1]) - 1
 
+    # find words in corpus with desired letters
     res = '\n'.join(re.findall(f'\w*[{letters}]\w*', input))
     res = res.split('\n')
 
     scores = list()
 
+    # award a point for each time a letter appears
     for word in res:
         score = 0
         for i in range(len(letters)):
@@ -285,15 +323,19 @@ def sacrifice_word(input, letters, unique_letter_positions):
                 score += 1
         scores.append([word, score])
 
+    # award a point for when a unique_letter_position appears in the right place
     for word_score in scores:
         for item in unique_list:
             i = item[1]
             if word_score[0][i] == item[0]:
                 word_score[1] += 1
-
+    # sort scores by highest first
     scores.sort(key=lambda x: x[1], reverse=True)
-    scores = scores[:20]
+    # display top words
+    scores = scores[:30]
 
+    # create a list of scores to return
+    # buff and cnt help give the same ranking to ties
     final = str()
     buff = scores[0][1]
     cnt = 0
@@ -314,7 +356,9 @@ def sacrifice_word(input, letters, unique_letter_positions):
 
     return final
 
+# run all the functions
 
+# run normal wordle search
 if sacrifice_mode == False:
     words_string = not_contain(words_string, letters_not_in_answer)
     words_string = green_letters(words_string, green)
@@ -322,6 +366,7 @@ if sacrifice_mode == False:
     eff = efficiency(words_string, limit=limit, elim_weight=elim_weight)
     print(eff)
 
+# run sacrifice mode
 if sacrifice_mode == True:
     sac_wor = sacrifice_word(complete_words_string, sacrifice_word_letters,
                              sacrifice_unique_letter_positions)
