@@ -1,7 +1,6 @@
-import requests
+with open("words_string.txt", "r") as ws:
+    words_string = ws.read()
 
-r = requests.get(
-    'https://gist.githubusercontent.com/cfreshman/d5fb56316158a1575898bba1eed3b5da/raw/25d00e56705240135119d4b604d78c3d30c46094/wordle-nyt-allowed-guesses-update-12546.txt')
+list_of_words = words_string.split('\n')
 
-words = r.text
-print(words)
+print(len(list_of_words))

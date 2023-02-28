@@ -1,9 +1,8 @@
-letters_not_in_answer = 'ose'
-green = 'r2'
-yellow = 'a1'
+letters_not_in_answer = ''
+green = ''
+yellow = ''
 
-
-limit = 25
+limit = 20
 elim_weight = .9
 
 

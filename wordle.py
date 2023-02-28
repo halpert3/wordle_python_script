@@ -295,6 +295,8 @@ def efficiency(input, limit=None, elim_weight=.05):
 
 def sacrifice_word(input, letters, unique_letter_positions):
 
+    letters = letters.lower()
+
     # create an empty list if no unique_letter_postions
     if unique_letter_positions == '':
         unique_list = list()
@@ -307,6 +309,7 @@ def sacrifice_word(input, letters, unique_letter_positions):
 
     # convert string to integer as index
     for item in unique_list:
+        item[0] = item[0].lower()
         item[1] = int(item[1]) - 1
 
     # find words in corpus with desired letters
