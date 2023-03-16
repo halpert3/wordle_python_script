@@ -9,6 +9,11 @@ with open("words_string.txt", "r") as ws:
 # replicating for sacrifice word function
 complete_words_string = words_string
 
+# getting list of possible answers
+with open("possible_answers.txt", "r") as pa:
+    possible_answers = pa.read()
+possible_answers_list = possible_answers.split('\n')
+
 
 def not_contain(input, letters):
     # skip function if no letters given
@@ -83,7 +88,6 @@ def eliminate_used_yellow(input, letter, positions):
 
     # crate a list of regex's to run
     all_regex = [f'\\b{x}\\b' for x in all_regex]
-
     # run the regexes and rejoin the created list as a string
     for regex in all_regex:
         res = '\n'.join(re.findall(f'{regex}', res))
@@ -115,7 +119,6 @@ def find_potential_words_yellow(input, letter, positions):
     for x in all_regex:
         regex += x + '\\b|\\b'
     regex = regex[:-3]
-
     # run the regexes and rejoin the created list as a string
     res = '\n'.join(re.findall(f'{regex}', input))
     return res
@@ -245,6 +248,15 @@ def efficiency_elimination(input):
     return elim_scores
 
 
+def check_poss_answer(word):
+    # returns a check mark if the word is in the possible answer list
+    check = u'\N{check mark}'
+    if word in possible_answers_list:
+        return f'{check}'
+    else:
+        return ''
+
+
 def efficiency(input, limit=None, elim_weight=.05):
 
     # run the two efficiency methods
@@ -281,12 +293,12 @@ def efficiency(input, limit=None, elim_weight=.05):
     cnt = 0
     for i, item in enumerate(scores):
         if i == 0:
-            final += f'{i+1}. {item[0]} {item[1]}%\n'
+            final += f'{i+1}. {item[0]} {item[1]}% {check_poss_answer(item[0])}\n'
         elif item[1] == buff:
             cnt += 1
-            final += f'{i+1-cnt}. {item[0]} {item[1]}%\n'
+            final += f'{i+1-cnt}. {item[0]} {item[1]}% {check_poss_answer(item[0])}\n'
         else:
-            final += f'{i+1}. {item[0]} {item[1]}%\n'
+            final += f'{i+1}. {item[0]} {item[1]}% {check_poss_answer(item[0])}\n'
             buff = item[1]
             cnt = 0
 
@@ -360,6 +372,7 @@ def sacrifice_word(input, letters, unique_letter_positions):
     return final
 
 # run all the functions
+
 
 # run normal wordle search
 if sacrifice_mode == False:
