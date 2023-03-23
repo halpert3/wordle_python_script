@@ -183,37 +183,35 @@ When you run `wordle.py`, the top 10 output is:
 
 In this sacrifice mode, the scoring awards one point to each letter found in the word. All these words have an L, an M, and an H so they all receive 3 points.
 
-But the first word MAHAL wouldn't be a good pick in this situation. It has an H in position 3, but we know the answer already has an H in position 5, so entering MAHAL as a guess will automatically have a yellow H and not give us a meaningful clue about whether the word has two H's.
+But the first word MAHAL wouldn't be an ideal pick in this situation. It has an H in position 3, but we know the answer already has an H in position 5, so entering MAHAL as a guess will automatically have a yellow H and not give us a meaningful clue about whether the word has two H's.
 
 To account for such a situation, use the `sacrifice_unique_letter_positions` variable, assigning it the letter and the desired slot to reveal. In this case, we want to know if there's an H in position 1 in case the answer is HUNCH.
 
 ``` py
 sacrifice_mode = True
-sacrifice_word_letters = 'ML'
+sacrifice_word_letters = 'MLh'
 sacrifice_unique_letter_positions = 'h1'
 ```
 
 Now the top output is:
 
 ```
-1. haulm - 3 points
-1. holms - 3 points
-1. halma - 3 points
-1. helms - 3 points
-1. hamel - 3 points
-1. hamal - 3 points
-1. holme - 3 points
-1. hilum - 3 points
-1. hemal - 3 points
-1. halms - 3 points
-11. mamil - 2 points
-11. limas - 2 points
-11. almud - 2 points
-11. samel - 2 points
-11. mahal - 2 points
-11. mazel - 2 points
+1. haulm - 4 points
+1. holms - 4 points
+1. halma - 4 points
+1. helms - 4 points
+1. hamel - 4 points
+1. hamal - 4 points
+1. holme - 4 points
+1. hilum - 4 points
+1. hemal - 4 points
+1. halms - 4 points
+11. mahal - 3 points
+11. harim - 3 points
+11. halsh - 3 points
+11. homes - 3 points
 ```
-For the words with three points, they get one point for each appearing `sacrifice_word_letters` and one point for each `sacrifice_unique_letter_positions`. Notice how in this situation, MAHAL only receives 2 points.
+For the words with four points, they get one point for each appearing `sacrifice_word_letters` and one point for each `sacrifice_unique_letter_positions`. Notice how in this situation, MAHAL is lower ranked.
 
 ### Entering the variables
 * In sacrifice mode, `sacrifice_word_letters` cannot be empty.
