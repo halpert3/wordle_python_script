@@ -12,10 +12,9 @@ The script also offers a mode for what I call "sacrifice words." Sacrifice words
 
 The dataset contains 14,855 five-letter words from [this repo](https://github.com/tabatkins/wordle-list), whose README says they come directly from Wordle's source code.
 
-Keep in mind, however, that the majority of these words in this dataset are obscure. While Wordle will likely accept them all as valid words, Wordle does not seem to ever choose obscure words to be its daily answer. Likewise, Wordle doesn't seem to ever choose as answers four-letter nouns in their plural forms (such as CARDS) or four-letter verbs in their third-person present forms (such as TAKES).
+Keep in mind, however, that the majority of these words in this dataset are obscure. While Wordle will likely accept them all as valid words, the majority are unlikely to be a daily answer. Likewise, Wordle doesn't seem to ever choose as answers four-letter nouns in their plural forms (such as CARDS) or four-letter verbs in their third-person present forms (such as TAKES).
 
-According to [this site](https://www.wordunscrambler.net/word-list/wordle-word-list), Wordle accepts 2,309 words as possible daily answers.
-
+The results of running this script are cross-checked against a list of 2,315 possible daily answers found [here](https://github.com/Kinkelin/WordleCompetition/blob/main/data/official/shuffled_real_wordles.txt).
 
 
 ## How to Use the Script
@@ -51,15 +50,15 @@ yellow = 'r12, e35, f3'
 Save the `variables.py` file. When you run `python3 wordle.py`, the following will appear in the terminal:
 
 ```
-1. flyer 17.4855%
-2. feyer 17.0972%
-3. fumer 16.7987%
-4. fever 16.4103%
-4. fewer 16.4103%
-6. ferer 15.7981%
+1. flyer 17.6871% ✓
+2. fumer 17.0068%
+2. feyer 17.0068%
+4. fever 16.3265% ✓
+4. fewer 16.3265% ✓
+6. ferer 15.6463%
 ```
 
-These are the remaining possible words to choose from.
+These are the remaining possible words to choose from that will be accepted as valid words. The words with a check mark are also possible daily answers.  
 
 ### Letter Format
 
@@ -91,10 +90,10 @@ For example, if you run the script on the full dataset without assigning any gre
 
 ```
 1. soare 0.0108%
-1. arose 0.0108%
+1. arose 0.0108% ✓
 1. aeros 0.0108%
-4. raise 0.0106%
-4. arise 0.0106%
+4. raise 0.0106% ✓
+4. arise 0.0106% ✓
 4. serai 0.0106%
 4. reais 0.0106%
 4. aesir 0.0106%
